@@ -1,14 +1,23 @@
-function getFullName(firstName: string, lastName: string) {
-	if (typeof firstName !== 'string') {
-		throw new Error('Bad');
-	} // Почти бесполезная проверка для ТС
-	return `${firstName} ${lastName}`;
+function getFullName(userEntity: {
+  firstName: string;
+  lastName: string;
+  city: string;
+  age: number;
+}): string {
+  return `${userEntity.firstName} ${userEntity.lastName} ${userEntity.city} ${userEntity.age}`;
 }
-
-const getFullNameArrow = (firstName: string, lastName: string): string => {
-	return `${firstName} ${lastName}`;
-}
-
-console.log(getFullName('Pyotr', 'The First'));
 
 // Без явной конвертации типа его перемена произойти не может - в этом отличие статичной типизации ТС от динамичной в ЖС
+
+const user = {
+  firstName: "Pyotr",
+  lastName: "The First",
+  city: "Saint-P",
+  age: 42,
+  skills: {
+    dev: true,
+    devops: true,
+  },
+};
+
+console.log(getFullName(user));
