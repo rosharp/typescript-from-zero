@@ -1,13 +1,16 @@
-const skill: [number, string] = [1, 'Dev'];
-// const id = skill[0];
-// const skillName = skill[1];
-// // const q = skill[2]; - к нему мы обратиться не можем
+const skill: readonly [number, string] = [1, 'Dev'];
+// readonly - немодифицируемый
 
-// skill.push('Testing');
-// // const third = skill[2]; - все равно не можем, кортеж уже типизирован
-// skill.pop();
+// let a = 5;
+// a = 6;
+// // Переопределение константы - ошибка
 
-const [id, skillName] = skill; // деструктуризация, как в реакте - удобно вытаскивать элементы из кортежей
+const skills: readonly string[] = ['Dev', 'DevOps'];
+// skills[0] = ''; - будет невозможно
 
-const arr: [number, string, ...boolean[]] = [1, 'something', true, true, false]
-// Производное число boolean через spread operator
+// Когда есть какое-то свойство класса, которое должно быть сохранено - можно использовать
+
+// Альтернативная generics-запись - равносильно ридонли записи 
+const somethings : ReadonlyArray<string> = ['wow', 'hello'];
+
+// somethings.push('hewwow'); - тоже невозможно
