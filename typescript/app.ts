@@ -1,23 +1,12 @@
-function getFullName(userEntity: {
-  firstName: string;
-  lastName: string;
-  city: string;
-  age: number;
-}): string {
-  return `${userEntity.firstName} ${userEntity.lastName} ${userEntity.city} ${userEntity.age}`;
+const skills: string[] = ['Dev', 'DevOps', 'Testing']; // Не просто массив, а массив строк
+
+for (let skill of skills) {
+  console.log(skill.toUpperCase());
 }
 
-// Без явной конвертации типа его перемена произойти не может - в этом отличие статичной типизации ТС от динамичной в ЖС
+const res = skills
+  .filter((s: string) => s !== 'DevOps')
+  .map(s => s + '! ')
+  .reduce((a, b) => a + b);
 
-const user = {
-  firstName: "Pyotr",
-  lastName: "The First",
-  city: "Saint-P",
-  age: 42,
-  skills: {
-    dev: true,
-    devops: true,
-  },
-};
-
-console.log(getFullName(user));
+console.log(res);
