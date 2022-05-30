@@ -1,16 +1,59 @@
-const skill: readonly [number, string] = [1, 'Dev'];
-// readonly - немодифицируемый
+enum StatusCode {
+  SUCCESS = 's',
+  IN_PROGRESS = 'p',
+  FAILED = 3 
+  // Гетерогенный енам
+}
 
-// let a = 5;
-// a = 6;
-// // Переопределение константы - ошибка
+const res = {
+  message: 'Payment was successful.',
+  statusCode: StatusCode.SUCCESS 
+};
 
-const skills: readonly string[] = ['Dev', 'DevOps'];
-// skills[0] = ''; - будет невозможно
+ 
 
-// Когда есть какое-то свойство класса, которое должно быть сохранено - можно использовать
+// 'success' - success, 'progress' - in progress, 3 - failed
 
-// Альтернативная generics-запись - равносильно ридонли записи 
-const somethings : ReadonlyArray<string> = ['wow', 'hello'];
+// if (res.statusCode === StatusCode.SUCCESS) {
 
-// somethings.push('hewwow'); - тоже невозможно
+// }
+
+function action(status: StatusCode) {
+
+}
+
+action(StatusCode.SUCCESS);
+action(3);
+action(1);
+// Даже гетерогенный енам автоматически будет оставаться числовым - но это не большая проблема
+// action('p'); - передача даже валидного значения в гетерогенный енам не сработает - он все равно числововй 
+
+// Четкий справочник кодов ответа, физических значений (движения), любой другой параметр в базе, который
+// имеет ограниченное число значений
+
+function compute() {
+  return 3;
+}
+
+enum Roles {
+  ADMIN = 1,
+  USER = ADMIN * 2,
+  DEALER = compute() 
+}
+
+// Использование енама в большом числе мест и микросервисов, их надо обновлять повсюду
+
+// function test(x: { ADMIN: number }) {
+
+// }
+
+// Часто ведет себя как объект
+// test(Roles);
+
+// Как енамы выглядят в рантайме? 
+
+// Компилятор будет искать все места, где упоминается тим, и будет убирать 
+const enum Team {
+  First = 1,
+  Second = 2
+}
