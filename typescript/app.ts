@@ -1,7 +1,14 @@
-let revenue: number = 1000;
-let bonus: number = 500;
-let c: string = 'string';
-let d: boolean = true;
+function getFullName(firstName: string, lastName: string) {
+	if (typeof firstName !== 'string') {
+		throw new Error('Bad');
+	} // Почти бесполезная проверка для ТС
+	return `${firstName} ${lastName}`;
+}
 
-let res: number = revenue + bonus;
-console.log(res);
+const getFullNameArrow = (firstName: string, lastName: string): string => {
+	return `${firstName} ${lastName}`;
+}
+
+console.log(getFullName('Pyotr', 'The First'));
+
+// Без явной конвертации типа его перемена произойти не может - в этом отличие статичной типизации ТС от динамичной в ЖС
