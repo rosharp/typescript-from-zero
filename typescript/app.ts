@@ -1,44 +1,19 @@
-interface User {
-  name: string,
-  age: number,
-  skills: string[]
+// interface User {
+//   name: string,
+//   age: number,
+// };
 
-  log: (id: number) => string;
-};
+// interface User {
+//   age: number,
+// } // Один интерфейс дополняет другой
 
-interface Role {
-  roleId: number
+// const user: User = {
+//   name: 'as',
+//   age: 33,
+// }
+
+type ID = string | number; // работает с примитивными типами
+
+interface IDI { // нельзя заэкстендить от примитивных типов
+  ID: string | number; // должен работать с описаниями классов и сложными типами
 }
-interface UserWithRole extends User, Role {
-  createdAt: Date;
-} // Будет иметь все, как юзер + рол айди
-
-type User2 = {
-  name: string,
-  age: number,
-  skills: string[]
-
-  log: (id: number) => string;
-}
-
-let user: UserWithRole = {
-  name: 'asd',
-  age: 33,
-  skills: ['1', '2'],
-  roleId: 1,
-  createdAt: new Date(),
-
-  log(id) {
-    return '';
-  }
-};
-
-interface UserDic {
-  [index: number]: User // у интерфейса index может быть неограниченное число свойств
-}
-
-type UserDic2 = {
-  [index: number]: User 
-}
-
-type ud = Record<number, User>
