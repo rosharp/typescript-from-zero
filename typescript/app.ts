@@ -1,22 +1,32 @@
-// enum RequestType {
-//   GET = 'get',
-//   POST = 'post'
+// type httpMethod = 'post' | 'get'; 
+
+// type coolString = string;
+
+// function fetchWithAuth(url: string, method: httpMethod): 1 | -1 {
+//   return 1;
 // }
 
-// на каждый чих делать енам не надо
+// fetchWithAuth('asdf', 'post');
 
-function fetchWithAuth(url: string, method: 'post' | 'get'): 1 | -1 {
-  return 1;
+// let method = 'post';
+
+// fetchWithAuth('s', method as 'post'); // если передать что-то другое, то типизация сломается
+
+type User = {
+  name: string,
+  age: number,
+  skills: string[]
+};
+
+type Role = {
+  id: number
 }
 
-fetchWithAuth('asdf', 'post');
-// fetchWithAuth('asdf', 'fda'); - если есть что-то другое, кроме как в литерале, то ошибка
+type UserWithRole = User & Role;
 
-const a: 'asd' = 'asd'; // типом будет значение
-// ничего будет не присвоить
-
-let method = 'post';
-
-fetchWithAuth('s', method as 'post'); // если передать что-то другое, то типизация сломается
-
-// на рантайме ничего нового не отображается
+let user: UserWithRole = {
+  name: 'asd',
+  age: 33,
+  skills: ['1', '2'],
+  id: 1
+};
