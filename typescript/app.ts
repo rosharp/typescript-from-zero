@@ -1,32 +1,44 @@
-// type httpMethod = 'post' | 'get'; 
-
-// type coolString = string;
-
-// function fetchWithAuth(url: string, method: httpMethod): 1 | -1 {
-//   return 1;
-// }
-
-// fetchWithAuth('asdf', 'post');
-
-// let method = 'post';
-
-// fetchWithAuth('s', method as 'post'); // если передать что-то другое, то типизация сломается
-
-type User = {
+interface User {
   name: string,
   age: number,
   skills: string[]
+
+  log: (id: number) => string;
 };
 
-type Role = {
-  id: number
+interface Role {
+  roleId: number
 }
+interface UserWithRole extends User, Role {
+  createdAt: Date;
+} // Будет иметь все, как юзер + рол айди
 
-type UserWithRole = User & Role;
+type User2 = {
+  name: string,
+  age: number,
+  skills: string[]
+
+  log: (id: number) => string;
+}
 
 let user: UserWithRole = {
   name: 'asd',
   age: 33,
   skills: ['1', '2'],
-  id: 1
+  roleId: 1,
+  createdAt: new Date(),
+
+  log(id) {
+    return '';
+  }
 };
+
+interface UserDic {
+  [index: number]: User // у интерфейса index может быть неограниченное число свойств
+}
+
+type UserDic2 = {
+  [index: number]: User 
+}
+
+type ud = Record<number, User>
