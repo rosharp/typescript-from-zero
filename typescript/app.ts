@@ -1,59 +1,57 @@
-enum StatusCode {
-  SUCCESS = 's',
-  IN_PROGRESS = 'p',
-  FAILED = 3 
-  // Гетерогенный енам
+// const arr = ['string', 1]; // either string or number 
+
+function logId(id: string | number | boolean) {
+  console.log(id);
+  // toLowerCase здесь пока не получится, потому что айди все еще юнион тип
+
+  if (typeof id === 'string') {
+    console.log(id.toLowerCase());
+    // Теперь открываются методы для строк и чисел
+  } else if (typeof id === 'number') {
+    console.log(id);
+    // А теперь только булианы
+  }
 }
 
-const res = {
-  message: 'Payment was successful.',
-  statusCode: StatusCode.SUCCESS 
-};
+logId(1);
+logId('string');
+logId(true);
 
- 
+function logError(err: string | string[]) {
+  if (Array.isArray(err)) {
+    console.log(err);
+  } else {
+    console.log(err); // string
+  }
+}
 
-// 'success' - success, 'progress' - in progress, 3 - failed
-
-// if (res.statusCode === StatusCode.SUCCESS) {
-
+// function logObject(obj: { a: number } | { b: number }) {
+//   if (Array.isArray(obj)) {
+//     console.log(obj);
+//   } else {
+//     console.log(obj); // string
+//   }
 // }
 
-function action(status: StatusCode) {
-
+function logObject(obj: { a: number } | { b: number }) {
+  if ('a' in obj) {
+    console.log(obj.a);
+  } else {
+    console.log(obj.b);
+    
+  }
 }
 
-action(StatusCode.SUCCESS);
-action(3);
-action(1);
-// Даже гетерогенный енам автоматически будет оставаться числовым - но это не большая проблема
-// action('p'); - передача даже валидного значения в гетерогенный енам не сработает - он все равно числововй 
-
-// Четкий справочник кодов ответа, физических значений (движения), любой другой параметр в базе, который
-// имеет ограниченное число значений
-
-function compute() {
-  return 3;
+function logMultipleIds(a: string | number, b: string | boolean) {
+  if (a === b) {
+    // string methods
+  } else {
+    console.log(a);
+   // either string or a num 
+  }
 }
 
-enum Roles {
-  ADMIN = 1,
-  USER = ADMIN * 2,
-  DEALER = compute() 
-}
+let one = 1; // type will be 1, not number
+// a = 2
 
-// Использование енама в большом числе мест и микросервисов, их надо обновлять повсюду
 
-// function test(x: { ADMIN: number }) {
-
-// }
-
-// Часто ведет себя как объект
-// test(Roles);
-
-// Как енамы выглядят в рантайме? 
-
-// Компилятор будет искать все места, где упоминается тим, и будет убирать 
-const enum Team {
-  First = 1,
-  Second = 2
-}
