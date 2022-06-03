@@ -1,31 +1,36 @@
-// null - явно заданный неопределенный объект
-// undefined - не содержит какого-то свойства, незаданный
+let a = 5;
+let b: string = a.toString();
+let e = new String(a).valueOf();
+let f: boolean = new Boolean(a).valueOf();
 
-const n: null = null; 
-const n1: any = null;
-// const n2: number = null; => error
-// const n3: string = null; => error
-// const n4: boolean = null; => error
-// const n3: undefined = null; => error
-
-// strictNullCheck fron tsconfig
+let c = 'sdff';
+let d: number = parseInt(c);
 
 interface User {
-  name: string
+  name: string;
+  email: string;
+  login: string;
 }
 
-function getUser() {
-  if (Math.random() > 0.5) {
-    return null;
-  } else {
-    return {
-      name: 'Vasya'
-    } as User
+const user: User = {
+  name: 'Vasya',
+  email: 'vasily@gmail.com',
+  login: 'vasya'
+} as User;
+
+interface Admin {
+  name: string;
+  role: number;
+}
+
+const admin: Admin = {
+  ...user,
+  role: 1
+}
+
+function userToAdmin(user: User): Admin {
+  return {
+    name: user.name,
+    role: 1
   }
-}
-
-const user = getUser();
-
-if (user) {
-  const n55 = user.name;
 }
