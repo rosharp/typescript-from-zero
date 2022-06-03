@@ -1,37 +1,29 @@
-interface User {
-  login: string,
-  password?: string,
-  // ? добавляет опциональность
-  // неэквивалентна string | undefined - если удалить пароль в консте, то будет ошибка
+function logId(id: string | number): void {
+  console.log(id);
 }
 
-const user: User = {
-  login: 'a@a.ru',
-  password: '1'
+const a = logId(1); // void
+
+function multiply(f: number, s?: string): number | void {
+  if (!s) {
+    return f * f;
+  }
 }
 
-function multiply(first: number, second?: number): number {
-  // мы могли сказать second?: number = 5
-  if (!second) {
-    return first * first;
-  } 
+type voidFunc = () => void; // можем вернуть что угодно, но этот возврат будет игнорироваться
 
-  return first * second;
+const f1: voidFunc = () => {}
+
+const f2: voidFunc = () => {
+  return true
 }
 
-multiply(5);
+const b = f2(); // void
 
-interface UserPro {
-  login: string,
-  password?: {
-    type: 'primary' | 'secondary'
-  },
+const skills = ['Dev', 'DevOps']
+
+const user = {
+  s: ['']
 }
 
-function testPass(user: UserPro) {
-  const t = user.password?.type;
-}
-
-function test(param?: string) {
-  const t = param ?? multiply(5); // ?? проверяет, если парамс нулл или андефайнд - умножить на 5, если да
-}
+skills.forEach((skill) => user.s.push(skill));
