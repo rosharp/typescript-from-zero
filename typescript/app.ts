@@ -1,46 +1,31 @@
-// never - никогда не будет присвоено
+// null - явно заданный неопределенный объект
+// undefined - не содержит какого-то свойства, незаданный
 
-function generateError(message: string): never {
-  throw new Error(message);
+const n: null = null; 
+const n1: any = null;
+// const n2: number = null; => error
+// const n3: string = null; => error
+// const n4: boolean = null; => error
+// const n3: undefined = null; => error
+
+// strictNullCheck fron tsconfig
+
+interface User {
+  name: string
 }
 
-function dumpError(): never {
-  // return '' => error
-  while (true) {}
-}
-
-function rec(): never {
-  return rec(); 
-}
-
-const a: void = undefined;
-// const a: never = undefined; => error
-
-type paymentAction = 'refund' | 'checkout' | 'reject';
-
-function processAction(action: paymentAction) {
-  switch (action) {
-    case 'refund':
-      // ...
-      break;
-    case 'checkout':
-      // ...
-      break;
-      case 'reject':
-        // ...
-        break;
-    default:
-      const _: never = action;
-      throw new Error('Action not found');
+function getUser() {
+  if (Math.random() > 0.5) {
+    return null;
+  } else {
+    return {
+      name: 'Vasya'
+    } as User
   }
 }
 
+const user = getUser();
 
-function isString(x: string | number): boolean {
-  if (typeof x === 'string') {
-    return true;
-  } else if (typeof x === 'number') {
-    return false;
-  }
-  generateError('Incorrect type'); // Исчерпывающая проверка
+if (user) {
+  const n55 = user.name;
 }
