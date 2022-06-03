@@ -1,44 +1,46 @@
-// нужен, когда хотим типизировать, но не знаем, что за переменная
+// never - никогда не будет присвоено
 
-// никогда в таких случаях нельзя использовать any
+function generateError(message: string): never {
+  throw new Error(message);
+}
 
+function dumpError(): never {
+  // return '' => error
+  while (true) {}
+}
 
-let input: unknown;
+function rec(): never {
+  return rec(); 
+}
 
-input = 3;
-input = ['sf', 'sdf'];
+const a: void = undefined;
+// const a: never = undefined; => error
 
-let res: any = input; // нельзя положить ничего другого 
+type paymentAction = 'refund' | 'checkout' | 'reject';
 
-function run(i: unknown) {
-  if (typeof i == 'number') {
-    i++;
-  } else {
-    i // сужения типа не будет - все еще анноун
+function processAction(action: paymentAction) {
+  switch (action) {
+    case 'refund':
+      // ...
+      break;
+    case 'checkout':
+      // ...
+      break;
+      case 'reject':
+        // ...
+        break;
+    default:
+      const _: never = action;
+      throw new Error('Action not found');
   }
 }
 
-run(input);
 
-async function getData() {
- try {
-   await fetch('');
- } catch (error) {
-   if (error instanceof Error) {
-     console.log(error.message);
-   }
- } 
-}
-
-async function getDataForce() {
-  try {
-    await fetch('');  
-  } catch (error) {
-    const e = error as Error;
-    console.log(e.message);
-    }
+function isString(x: string | number): boolean {
+  if (typeof x === 'string') {
+    return true;
+  } else if (typeof x === 'number') {
+    return false;
   }
-
-type U1 = unknown | number; // unknown - самый широкий тип 
-
-type I1 = unknown & string; // string 
+  generateError('Incorrect type'); // Исчерпывающая проверка
+}
