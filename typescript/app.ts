@@ -1,29 +1,44 @@
-function logId(id: string | number): void {
-  console.log(id);
-}
+// нужен, когда хотим типизировать, но не знаем, что за переменная
 
-const a = logId(1); // void
+// никогда в таких случаях нельзя использовать any
 
-function multiply(f: number, s?: string): number | void {
-  if (!s) {
-    return f * f;
+
+let input: unknown;
+
+input = 3;
+input = ['sf', 'sdf'];
+
+let res: any = input; // нельзя положить ничего другого 
+
+function run(i: unknown) {
+  if (typeof i == 'number') {
+    i++;
+  } else {
+    i // сужения типа не будет - все еще анноун
   }
 }
 
-type voidFunc = () => void; // можем вернуть что угодно, но этот возврат будет игнорироваться
+run(input);
 
-const f1: voidFunc = () => {}
-
-const f2: voidFunc = () => {
-  return true
+async function getData() {
+ try {
+   await fetch('');
+ } catch (error) {
+   if (error instanceof Error) {
+     console.log(error.message);
+   }
+ } 
 }
 
-const b = f2(); // void
+async function getDataForce() {
+  try {
+    await fetch('');  
+  } catch (error) {
+    const e = error as Error;
+    console.log(e.message);
+    }
+  }
 
-const skills = ['Dev', 'DevOps']
+type U1 = unknown | number; // unknown - самый широкий тип 
 
-const user = {
-  s: ['']
-}
-
-skills.forEach((skill) => user.s.push(skill));
+type I1 = unknown & string; // string 
