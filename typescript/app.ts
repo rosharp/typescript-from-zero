@@ -1,27 +1,35 @@
-// Для 1-3 реализаций
+enum PaymentStatus {
+  Holded,
+  Processed,
+  Reversed
+}
 
-class User {
-  name: string;
-  age: number;
+class Payment {
+  id: number;
+  status: PaymentStatus = PaymentStatus.Holded;
+  createdAt: Date = new Date();
+  updatedAt: Date; 
 
-  constructor();
-  constructor(name: string);
-  constructor(age: number); // Конструктор реализации
-  constructor(name: string, age: number);
+  constructor(id: number) {
+    this.id = id;
+  }
 
-  constructor(ageOrName?: string | number, age?: number) { // Конструктор имплементации
-    if (typeof ageOrName === "string") {
-      this.name = ageOrName;
-    } else if (typeof ageOrName === "number") {
-      this.age = ageOrName;
+  getPaymentLifetime(): number {
+    return new Date().getTime() - this.createdAt.getTime();
+  }
+
+  unholdPayment(): void {
+    if (this.status == PaymentStatus.Processed) {
+      throw new Error('Payment cannot be unholded.');
     }
-
-    if (typeof age === 'number') {
-      this.age = age;
-    }
+    this.status = PaymentStatus.Reversed; // cancelled
+    this.updatedAt = new Date(); // renewed
   }
 }
 
-const user = new User("Vasya");
-const user2 = new User();
-const user3 = new User(33);
+const payment = new Payment(1);
+payment.unholdPayment();
+console.log(payment);
+const time = payment.getPaymentLifetime();
+console.log(time);
+// payment.status = PaymentStatus.Reversed;
