@@ -1,34 +1,38 @@
-// Getter and setter
+// Implements 
 
-// Позволяют переопределить то, как будут составляться свойства объекта
+// Логировать можно по-разному, но важно, чтобы использовался обязательный метод log / Error
 
-// If async is needed => use methods, not getters or setters
+// Отделение реализации конкретного логгера от реализации в коде или присвоение каких-либо определенных классов
 
-class User {
-  _login: string;
-  password: string;
-  createdAd: Date;
+interface ILogger {
+	log(...args): void
+	error(...args): void;
+} // + dependency ejections method
 
-  // cannot be async
-  set login(l: string | number) {
-    this._login = 'user-' + l;
-    this.createdAd = new Date();
-  } // if nothing here => readonly
+class Logger implements ILogger {
+	log(...args: any[]): void {
+		console.log(...args);
+	}
+	async error(...args: any[]): Promise<void> {
+		// Кинуть во внешнюю систему
+		console.log(...args);
+	} // realize ILogger interface 
+} // Имплементированные методы могут быть асинхронными
 
-  // set password(p: string) {
-  //   // sync => blocking JS
-  // }
-
-  async getPassword(p: string) {
-
-  }  
-
-  get login() {
-    return this._login;
-  }
+interface IPayable {
+	pay(paymentId: number): void;
+	price?: number;
 }
 
-const user = new User();
-user.login = 'myLogin';
-console.log(user);
-console.log(user.login);
+interface IDeletable {
+	delete(): void;
+}
+class User implements IPayable, IDeletable {
+	delete(): void {
+		/// Delete
+	} // не все свойства будут автоматически имплементированы
+	pay(paymentId: number): void { // тип здесь должен быть шире: number | string
+		///
+	}
+	price?: number | undefined;
+}
