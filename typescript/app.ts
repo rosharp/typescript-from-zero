@@ -1,40 +1,33 @@
-// protected дает доступ для наследников
-// private доступен только изнутри функции
-// можно использовать и с функциями
+// static
 
-class Vehicle {
-	public maker: string; // public is optiotnal
-	private damages: string[]; // приватность актуальна только для тайпа
-	private _model: string;
-	protected run: number; // внутри класса можем обращаться, извне - нет 
+// позволяет делать свойства или методы статичными
 
-	#price: number; // приватное свойство в JS 
+// утилитарные функции или переменные лучше писать как функции или переменные, а не в статике
 
-	set model(m: string) {
-		this._model = m;
-		this.#price = 100;
+class UserService {
+	// static name: string = 'sdf'; => error, conflict
+	static db: any;
+
+	static async getUser(id: number) { // статичное свойство может быть асинхронным
+		return UserService.db.findById(id);
 	}
 
-	get model() {
-		return this._model; 
+	constructor(id: number) { // не можем передать статичные данные
+
 	}
 
-	isPriceEqual(v: Vehicle) {
-		return this.#price === v.#price; // проверка эквивалентности приватных свойств даже с внешними объектами
+	create () { // можем обращаться к статичным сервисам1
+		UserService.db;
 	}
 
-	addDamage(damage: string) {
-		this.damages.push(damage);
+	static { // инициализатор статичного блока
+		// await new Promise() => error
 	}
-}
+} // нет необходимости обращаться к нему
 
-class EuroTruck extends Vehicle {
-	setDamage() {
-		// 	
-	}
+// no need for instance
+// все будет обращаться к одному и тому же объекту в системе
+UserService.getUser(1);
 
-	setRun(km: number) {
-		this.run = km / 0.62;
-		// this.damage => error
-	}
-}
+const inst = new UserService(1);
+inst.create();
