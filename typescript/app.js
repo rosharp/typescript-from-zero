@@ -1,15 +1,44 @@
 "use strict";
-// Getter and setter
-// Позволяют переопределить то, как будут составляться свойства объекта
-class User {
-    set login(l) {
-        this._login = 'user-' + l;
+// Extends 
+class Payment {
+    constructor(id) {
+        this.status = 'new';
+        this.id = id;
     }
-    get login() {
-        return 'no_login';
+    pay() {
+        this.status = 'paid';
     }
 }
-const user = new User();
-user.login = 'myLogin';
-console.log(user);
-console.log(user.login);
+class PersistedPayment extends Payment {
+    constructor() {
+        const id = Math.random();
+        super(id); // обращаемся к конструктору и начинаем конструировать с идентификатором
+    }
+    save() {
+        // Сохраняет в базу
+    }
+    pay(date) {
+        super.pay();
+        if (date) {
+            this.paidAt = date;
+        }
+    }
+}
+// override - переопределение метода
+// если не использовать, то понять переобращение можно понять только по супер
+// если супер нет, то просто создается новый метод
+// override нужен для избежения этой ошибки
+new PersistedPayment().pay();
+class User {
+    constructor() {
+        this.name = 'user';
+        console.log(this.name);
+    }
+}
+class Admin extends User {
+    constructor() {
+        super(...arguments);
+        this.name = 'admin';
+    }
+}
+new Admin();
