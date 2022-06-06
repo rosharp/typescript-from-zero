@@ -1,54 +1,40 @@
-class User {
-	name: string;
+// protected дает доступ для наследников
+// private доступен только изнутри функции
+// можно использовать и с функциями
 
-	constructor(name: string) {
-		this.name = name;
+class Vehicle {
+	public maker: string; // public is optiotnal
+	private damages: string[]; // приватность актуальна только для тайпа
+	private _model: string;
+	protected run: number; // внутри класса можем обращаться, извне - нет 
+
+	#price: number; // приватное свойство в JS 
+
+	set model(m: string) {
+		this._model = m;
+		this.#price = 100;
+	}
+
+	get model() {
+		return this._model; 
+	}
+
+	isPriceEqual(v: Vehicle) {
+		return this.#price === v.#price; // проверка эквивалентности приватных свойств даже с внешними объектами
+	}
+
+	addDamage(damage: string) {
+		this.damages.push(damage);
 	}
 }
 
-class Users extends Array<User> {
-	searchByName(name: string) {
-		return this.filter(u => u.name === name);
+class EuroTruck extends Vehicle {
+	setDamage() {
+		// 	
 	}
 
-	override toString(): string {
-		return this.map(u => u.name).join(', ');
+	setRun(km: number) {
+		this.run = km / 0.62;
+		// this.damage => error
 	}
 }
-
-const users = new Users();
-users.push(new User('Vasya'));
-users.push(new User('Petya'));
-console.log(users.toString());
-
-class UserList {
-	users: User[];
-
-	push(u: User) {
-		this.users.push(u);
-	}
-}
-
-class Payment {
-	date: Date;
-}
-
-class UserWithPayment extends Payment { // код становится менее гибким из-за жесткого наследования
-	name: string; // в дальнейшем будет все больше конфликтов свойств
-}
-
-class UserWithPaymnet2 { // аггрегационный класс, который может иметь полностью свои методы, которые он жестко не связывает
-	user: User;
-	payment: Payment;
-
-	constructor(user: User, payment: Payment) {
-		this.payment = payment;
-		this.user = user;
-	}
-}
-
-// наследование лучше в рамках одной доменной области
-// не нужно, когда наследование происходит из сложных аггрегационных классов
-// наследование от стандартных классов, как еррор, можно использовать
-// следует использовать наследование, когда происходит переход из одной доменной области в другую
-// это увеличит связность кода
