@@ -1,25 +1,46 @@
-class User {
-	skills: string[];
+// Extends 
 
-	addSkill(skill: string): void;
-	addSkill(skillOrSkills: string[]): void;
+// Чрезмерное наследование создаст связность кода, которую придется распутывать
 
-	addSkill(skillOrSkills: string | string[]) {
-		if (typeof skillOrSkills === 'string') {
-			this.skills.push(skillOrSkills);
-		} else {
-			this.skills.concat(skillOrSkills);
+type PaymentStatus = 'new' | 'paid';
+
+class Payment {
+	id: number;
+	status: PaymentStatus = 'new';
+
+	constructor(id: number) {
+		this.id = id;
+	}
+
+	pay() {
+		this.status = 'paid';
+	}
+}
+
+class PersistedPayment extends Payment { // частое использование с добавление персистных данных
+	databaseId: number;
+	paidAt: Date;
+
+	constructor() {
+		const id = Math.random();
+		super(id); // обращаемся к конструктору и начинаем конструировать с идентификатором
+	}
+
+	save() {
+		// Сохраняет в базу
+	}
+
+	override pay(date?: Date) { // если дата обязательная, то ошибка 
+		super.pay();
+		if (date) {
+			this.paidAt = date;
 		}
 	}
 }
 
+// override - переопределение метода
+// если не использовать, то понять переобращение можно понять только по супер
+// если супер нет, то просто создается новый метод
+// override нужен для избежения этой ошибки
 
-function run(distance: string): void; 
-function run(distance: number): void;
-function run(distance: number | string): number | string {
-	if (typeof distance == 'number') {
-		return 1;
-	} else {
-		return '';
-	}
-}
+new PersistedPayment().pay(); 
