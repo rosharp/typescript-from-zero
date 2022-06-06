@@ -1,38 +1,47 @@
-// Implements 
+// Extends 
 
-// Логировать можно по-разному, но важно, чтобы использовался обязательный метод log / Error
+// Чрезмерное наследование создаст связность кода, которую придется распутывать
 
-// Отделение реализации конкретного логгера от реализации в коде или присвоение каких-либо определенных классов
+type PaymentStatus = 'new' | 'paid';
 
-interface ILogger {
-	log(...args): void
-	error(...args): void;
-} // + dependency ejections method
+class Payment {
+	id: number;
+	status: PaymentStatus = 'new';
 
-class Logger implements ILogger {
-	log(...args: any[]): void {
-		console.log(...args);
+	constructor(id: number) {
+		this.id = id;
 	}
-	async error(...args: any[]): Promise<void> {
-		// Кинуть во внешнюю систему
-		console.log(...args);
-	} // realize ILogger interface 
-} // Имплементированные методы могут быть асинхронными
 
-interface IPayable {
-	pay(paymentId: number): void;
-	price?: number;
-}
-
-interface IDeletable {
-	delete(): void;
-}
-class User implements IPayable, IDeletable {
-	delete(): void {
-		/// Delete
-	} // не все свойства будут автоматически имплементированы
-	pay(paymentId: number): void { // тип здесь должен быть шире: number | string
-		///
+	pay() {
+		this.status = 'paid';
 	}
-	price?: number | undefined;
 }
+
+class PersistedPayment extends Payment { // частое использование с добавление персистных данных
+	databaseId: number;
+	paidAt: Date;
+
+	constructor() {
+		const id = Math.random();
+		super(id); // обращаемся к конструктору и начинаем конструировать с идентификатором
+	}
+
+	save() {
+		// Сохраняет в базу
+	}
+
+	override pay(date?: Date) { // если дата обязательная, то ошибка 
+		super.pay();
+		if (date) {
+			this.paidAt = date;
+		}
+	}
+}
+
+// override - переопределение метода
+// если не использовать, то понять переобращение можно понять только по супер
+// если супер нет, то просто создается новый метод
+// override нужен для избежения этой ошибки
+
+new PersistedPayment().pay(); 
+
