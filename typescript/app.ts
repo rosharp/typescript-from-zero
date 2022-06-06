@@ -1,75 +1,54 @@
-// Extends 
+class User {
+	name: string;
 
-// Чрезмерное наследование создаст связность кода, которую придется распутывать
+	constructor(name: string) {
+		this.name = name;
+	}
+}
 
-type PaymentStatus = 'new' | 'paid';
+class Users extends Array<User> {
+	searchByName(name: string) {
+		return this.filter(u => u.name === name);
+	}
+
+	override toString(): string {
+		return this.map(u => u.name).join(', ');
+	}
+}
+
+const users = new Users();
+users.push(new User('Vasya'));
+users.push(new User('Petya'));
+console.log(users.toString());
+
+class UserList {
+	users: User[];
+
+	push(u: User) {
+		this.users.push(u);
+	}
+}
 
 class Payment {
-	id: number;
-	status: PaymentStatus = 'new';
+	date: Date;
+}
 
-	constructor(id: number) {
-		this.id = id;
-	}
+class UserWithPayment extends Payment { // код становится менее гибким из-за жесткого наследования
+	name: string; // в дальнейшем будет все больше конфликтов свойств
+}
 
-	pay() {
-		this.status = 'paid';
+class UserWithPaymnet2 { // аггрегационный класс, который может иметь полностью свои методы, которые он жестко не связывает
+	user: User;
+	payment: Payment;
+
+	constructor(user: User, payment: Payment) {
+		this.payment = payment;
+		this.user = user;
 	}
 }
 
-class PersistedPayment extends Payment { // частое использование с добавление персистных данных
-	databaseId: number;
-	paidAt: Date;
-
-	constructor() {
-		const id = Math.random();
-		super(id); // обращаемся к конструктору и начинаем конструировать с идентификатором
-	}
-
-	save() {
-		// Сохраняет в базу
-	}
-
-	override pay(date?: Date) { // если дата обязательная, то ошибка 
-		super.pay();
-		if (date) {
-			this.paidAt = date;
-		}
-	}
-}
-
-// override - переопределение метода
-// если не использовать, то понять переобращение можно понять только по супер
-// если супер нет, то просто создается новый метод
-// override нужен для избежения этой ошибки
-
-new PersistedPayment().pay(); 
-
-class User {
-	name: string = 'user'; // сначала инициализируется свойство
-
-	constructor() { // затем конструктор
-		console.log(this.name);
-	}
-}
-
-class Admin extends User { // потом класс
-	name: string = 'admin'; // и только потом свойство
-
-	constructor() {
-		super(); // должен быть первым, если есть другие действия 
-		console.log(this.name);
-	}
-}
-
-new Admin();
-
-new Error('');
-
-class HttpError extends Error {
-	code: number;
-	constructor(message: string, code?: number) {
-		super(message);
-		this.code = code ?? 500;
-	}
-}
+// наследование лучше в рамках одной доменной области
+// не нужно, когда наследование происходит из сложных аггрегационных классов
+// наследование от стандартных классов, как еррор, можно использовать
+// следует использовать наследование, когда происходит переход из одной доменной области в другую
+// это увеличит связность кода
