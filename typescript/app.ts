@@ -1,33 +1,27 @@
-// this
+class UserBuilder {
+	name: string;
 
-class Payment {
-	private date: Date = new Date();
-
-	getDate(this: Payment) {
-		return this.date;
+	setName(name: string) {
+		this.name = name;
+		return this;
 	}
 
-	getDateArrow = () => {
-		return this.date;
-	}
-}
-
-const p = new Payment();
-
-const user = {
-	id: 1,
-	paymentDate: p.getDate.bind(p),
-	paymentDateArrow: p.getDateArrow
-}
-
-console.log(p.getDate());
-console.log(user.paymentDate()); // => если без bind - undefined (потеряли контекст)
-console.log(p.getDateArrow()); // arrow func => works without .bind
-
-class PaymentPersistent extends Payment {
-	save() {
-		return super.getDate();
+	isAdmin(): this is AdminBuilder {
+		return this instanceof AdminBuilder;
 	}
 }
 
-console.log(new PaymentPersistent().save());
+class AdminBuilder extends UserBuilder {
+	roles: string[];
+}
+
+const res = new UserBuilder().setName('Vasya');
+const res2 = new AdminBuilder().setName('Petya');
+
+let user: UserBuilder | AdminBuilder = new UserBuilder();
+
+if (user.isAdmin()) {
+	console.log(user); // admin
+} else {
+	console.log((user)); // user
+}
