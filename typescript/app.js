@@ -1,28 +1,19 @@
 "use strict";
-// this
-class Payment {
-    constructor() {
-        this.date = new Date();
-        this.getDateArrow = () => {
-            return this.date;
-        };
-    }
-    getDate() {
-        return this.date;
+// преимущество в том, что методы и классы внутри абстрактного класса необязательно должны быть абстрактными
+// интерфейсы могут только описывать, функционала в них быть не может
+// плюс внутри можно вызывать абстрактные классы
+class Controller {
+    handleWithLogs(req) {
+        console.log('Start');
+        this.handle(req);
+        console.log('End');
     }
 }
-const p = new Payment();
-const user = {
-    id: 1,
-    paymentDate: p.getDate.bind(p),
-    paymentDateArrow: p.getDateArrow
-};
-console.log(p.getDate());
-console.log(user.paymentDate()); // => если без bind - undefined (потеряли контекст)
-console.log(p.getDateArrow()); // arrow func => works without .bind
-class PaymentPersistent extends Payment {
-    save() {
-        return super.getDate();
-    }
+class UserController extends Controller {
+    handle(req) {
+        console.log(req);
+    } // if no handle => error
 }
-console.log(new PaymentPersistent().save());
+// new Controller() => error, инстанциируются только наследники
+const c = new UserController();
+c.handleWithLogs('Request');

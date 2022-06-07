@@ -1,27 +1,23 @@
-class UserBuilder {
-	name: string;
+// преимущество в том, что методы и классы внутри абстрактного класса необязательно должны быть абстрактными
+// интерфейсы могут только описывать, функционала в них быть не может
+// плюс внутри можно вызывать абстрактные классы
+abstract class Controller { // модификатор класса
+	abstract handle(req: any): void;
 
-	setName(name: string) {
-		this.name = name;
-		return this;
+	handleWithLogs(req: any) {
+		console.log('Start');
+		this.handle(req);
+		console.log('End');
 	}
-
-	isAdmin(): this is AdminBuilder {
-		return this instanceof AdminBuilder;
-	}
 }
 
-class AdminBuilder extends UserBuilder {
-	roles: string[];
+class UserController extends Controller {
+	handle(req: any): void {
+		console.log(req);
+	} // if no handle => error
 }
 
-const res = new UserBuilder().setName('Vasya');
-const res2 = new AdminBuilder().setName('Petya');
+// new Controller() => error, инстанциируются только наследники
 
-let user: UserBuilder | AdminBuilder = new UserBuilder();
-
-if (user.isAdmin()) {
-	console.log(user); // admin
-} else {
-	console.log((user)); // user
-}
+const c = new UserController();
+c.handleWithLogs('Request');
