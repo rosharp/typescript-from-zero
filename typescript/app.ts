@@ -1,33 +1,33 @@
-// static
+// this
 
-// позволяет делать свойства или методы статичными
+class Payment {
+	private date: Date = new Date();
 
-// утилитарные функции или переменные лучше писать как функции или переменные, а не в статике
-
-class UserService {
-	// static name: string = 'sdf'; => error, conflict
-	static db: any;
-
-	static async getUser(id: number) { // статичное свойство может быть асинхронным
-		return UserService.db.findById(id);
+	getDate(this: Payment) {
+		return this.date;
 	}
 
-	constructor(id: number) { // не можем передать статичные данные
-
+	getDateArrow = () => {
+		return this.date;
 	}
+}
 
-	create () { // можем обращаться к статичным сервисам1
-		UserService.db;
+const p = new Payment();
+
+const user = {
+	id: 1,
+	paymentDate: p.getDate.bind(p),
+	paymentDateArrow: p.getDateArrow
+}
+
+console.log(p.getDate());
+console.log(user.paymentDate()); // => если без bind - undefined (потеряли контекст)
+console.log(p.getDateArrow()); // arrow func => works without .bind
+
+class PaymentPersistent extends Payment {
+	save() {
+		return super.getDate();
 	}
+}
 
-	static { // инициализатор статичного блока
-		// await new Promise() => error
-	}
-} // нет необходимости обращаться к нему
-
-// no need for instance
-// все будет обращаться к одному и тому же объекту в системе
-UserService.getUser(1);
-
-const inst = new UserService(1);
-inst.create();
+console.log(new PaymentPersistent().save());
