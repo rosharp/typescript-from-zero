@@ -1,33 +1,34 @@
-function test(a: number): number | undefined { // без null теста ошибки не будет без unefined
-	if (a > 0) {
-		return a;
+class User {
+	role: 'admin' | 'user';
+	constructor(public name: string) {
+		this.name = name;
 	}
+
+	login(): void;
 }
 
-type StrOrNumberFunc = (a: number | string) => number;
+	function createUser(user: User) { // noUnusedParameters будет предупреждать о неиспользованных параметрах
+		// logic
 
-// let f: StrOrNumberFunc = test;
-// test('sdf'); => if strictFunctionTypes is true, there is no error
+		const defaultUser = new User('default'); // noUnusedLocals позволит избавиться от неиспользованных переменных
+		defaultUser.role = undefined; // exactOptionalPropertyTypes 
 
-// test.apply(undefined, [1, 3]); strictBindCallApply checks for proper arguments
+		switch(user.role) {
+			case 'admin':
+				// noFallthroughCasesInSwitch => если нет ни ретурна, ни брейка, то провала не будет 
+			case 'user':
+				return true;
+				const c = 1; // allowUnreachableCode выключит предупреждения при недостижимом коде
+		}
+	}
 
-// class A {
-// 	b: number; => error: strictPropertyInitialization checks for the right initialization
-// }
+interface IChecks {
+	[check: string]: boolean;
+}
 
-// class A {
-// 	b: number;
+const c: IChecks = { 'kpp': true };
+const d = c['drive']; // noUncheckedIndexedAccess => Add 'undefined' to a type when accessed using an index
 
-// 	test() {
-// 		return function() {
-// 			this.b = 5; error: noImplicitThis checks for the right context 
-// 		}
-// 	}
-// }
-
-// try {
-
-// } catch(e) {
-// 	console.log(e.message); useUnknownInCatchVariables checks for the right types in the context
-// }
-
+class VipUser extends User {
+	login(): void // noImplicitOverride => error
+}
