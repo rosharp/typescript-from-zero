@@ -11,6 +11,8 @@ abstract class Controller { // модификатор класса
 	}
 }
 
+/* @internal */
+// исключает некоторые типы в результате эмиттинга тайпсов
 class UserController extends Controller {
 	handle(req: any): void {
 		console.log(req);
