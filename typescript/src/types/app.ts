@@ -1,29 +1,33 @@
-// import { } from '@lib/';
-
-// преимущество в том, что методы и классы внутри абстрактного класса необязательно должны быть абстрактными
-// интерфейсы могут только описывать, функционала в них быть не может
-// плюс внутри можно вызывать абстрактные классы
-
-
-abstract class Controller { // модификатор класса
-	abstract handle(req: any): void;
-
-	handleWithLogs(req: any) {
-		console.log('Start');
-		this.handle(req);
-		console.log('End');
+function test(a: number): number | undefined { // без null теста ошибки не будет без unefined
+	if (a > 0) {
+		return a;
 	}
 }
 
-/* @internal */
-// исключает некоторые типы в результате эмиттинга тайпсов
-class UserController extends Controller {
-	handle(req: any): void {
-		console.log(req);
-	} // if no handle => error
-}
+type StrOrNumberFunc = (a: number | string) => number;
 
-// new Controller() => error, инстанциируются только наследники
+// let f: StrOrNumberFunc = test;
+// test('sdf'); => if strictFunctionTypes is true, there is no error
 
-const c = new UserController();
-c.handleWithLogs('Request');
+// test.apply(undefined, [1, 3]); strictBindCallApply checks for proper arguments
+
+// class A {
+// 	b: number; => error: strictPropertyInitialization checks for the right initialization
+// }
+
+// class A {
+// 	b: number;
+
+// 	test() {
+// 		return function() {
+// 			this.b = 5; error: noImplicitThis checks for the right context 
+// 		}
+// 	}
+// }
+
+// try {
+
+// } catch(e) {
+// 	console.log(e.message); useUnknownInCatchVariables checks for the right types in the context
+// }
+
