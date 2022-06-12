@@ -1,26 +1,42 @@
-class Resp<D, E> {
-	data?: D;
-	error?: E;
+// позволяет писать еще один вариант extends, обернутый в функцию
+// его преимущество: дополнительный тайп-чекинг и возможность
+// миксить свосйства сразу нескольких классов
 
-	constructor(data?: D, error?: E) {
-		if (data) {
-			this.data = data;	
-		}
-		if (error) {
-			this.error = error;	
-		}
+// хороши, когда необходимо взять элементы из двух разных областей
+// и совместить функционал
+
+type Contructor = new (...args: any) => {}
+type GContructor<T = {}> = new (...args: any) => T
+
+class List {
+	constructor(public items: string[]) {}
+}
+
+class Accordion {
+	isOpened: boolean;
+}
+
+type ListType = GContructor<List>; 
+type AccordionType = GContructor<Accordion>; 
+
+class ExtendedListClass extends List {
+	first() {
+		return this.items[0];
 	}
 }
 
-const res = new Resp<string, number>('data', 0);
-res.error
-
-class HTTPResp<F> extends Resp<string, number> {
-	code: F;
-
-	setCode(code: F) {
-		this.code = code;
+function ExtendedList<TBase extends ListType & AccordionType>(Base: TBase) {
+	return class ExtendedList extends Base {
+		first() {
+			return this.items[0];
+		}
 	}
 }
+class AccordionList {
+	isOpened: boolean;
+	constructor(public items: string[]) {}
+}
 
-const res2 = new HTTPResp();
+const list = ExtendedList(AccordionList);
+const res = new list(['first', 'second']);
+console.log(res.first());
